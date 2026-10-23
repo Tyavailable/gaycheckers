@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Are You Gay or Not?</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080808;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* BACKGROUND TEXT */
+.background-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    width: 100%;
+    font-size: clamp(35px, 9vw, 90px);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.045);
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1.4;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    font-size: 35px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 40px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    padding: 15px 35px;
+    border: 1px solid white;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.check {
+    background: white;
+    color: black;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+#result {
+    display: none;
+    margin-top: 35px;
+    animation: fadeIn 0.5s ease;
+}
+
+#answer {
+    font-size: 55px;
+    font-weight: bold;
+    margin: 20px 0;
+    transition: 0.3s;
+}
+
+.retry {
+    margin-top: 20px;
+    background: white;
+    color: black;
+}
+
+.footer {
+    position: fixed;
+    bottom: 20px;
+    font-size: 12px;
+    color: #555;
+    z-index: 2;
+}
+
+.particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    animation: explode 1.5s ease-out forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--x), var(--y)) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND TEXT -->
+<div class="background-text">
+    someone says<br>
+    you are gay
+</div>
+
+<div class="container">
+
+    <h1>ARE YOU GAY<br>OR NOT?</h1>
+
+    <p class="subtitle">
+        Let's find out your result.
+    </p>
+
+    <div class="buttons" id="buttons">
+        <button class="check" onclick="check()">
+            CHECK RESULT
+        </button>
+    </div>
+
+    <div id="result">
+        <p>YOUR RESULT</p>
+        <div id="answer"></div>
+
+        <button class="retry" onclick="retry()">
+            TRY AGAIN
+        </button>
+    </div>
+
+</div>
+
+<div class="footer">
+    Just for fun • 50/50 Random
+</div>
+
+<script>
+function check() {
+    document.getElementById("buttons").style.display = "none";
+
+    const answer = document.getElementById("answer");
+    const result = document.getElementById("result");
+
+    result.style.display = "block";
+    answer.innerText = "CHECKING...";
+    answer.style.color = "white";
+
+    setTimeout(() => {
+        const random = Math.random() < 0.5;
+
+        if (random) {
+            answer.innerText = "YES";
+            answer.style.color = "#00ff88";
+            particles("#00ff88");
+        } else {
+            answer.innerText = "NOT";
+            answer.style.color = "#ff3333";
+            particles("#ff3333");
+        }
+    }, 1500);
+}
+
+function particles(color) {
+    const answer = document.getElementById("answer");
+    const rect = answer.getBoundingClientRect();
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 60; i++) {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+
+        particle.style.background = color;
+        particle.style.left = centerX + "px";
+        particle.style.top = centerY + "px";
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 250 + 50;
+
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        particle.style.setProperty("--x", x + "px");
+        particle.style.setProperty("--y", y + "px");
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 1500);
+    }
+}
+
+function retry() {
+    document.getElementById("buttons").style.display = "flex";
+    document.getElementById("result").style.display = "none";
+}
+</script>
+
+</body>
+</html>
